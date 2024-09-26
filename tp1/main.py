@@ -51,7 +51,7 @@ print('Caratère le plus fréquent du fichier :', c)
 # (0 - 26) % 29 = key
 
 key = retreive_key_cesar(enc_cesar)
-print('Clé du chiffré enc_cesar.txt :', key)
+print('Clé du chiffré enc_cesar.txt :\n', key)
 
 dec_cesar = dechiffre_cesar(enc_cesar, key)
 
@@ -86,11 +86,60 @@ f = open('assets/enc_affine.txt')
 enc_affine = f.read()
 f.close()
 
-print('Chiffré de enc_affine.txt :', enc_affine)
+print('Chiffré de enc_affine.txt :', enc_affine, '\n')
 
 enc_affine_key = retreive_key_affine(enc_affine)
-print('Clé de enc_affine.txt :', enc_affine_key)
+print('Clé de enc_affine.txt :', enc_affine_key, '\n')
 
 dec_affine = dechiffre_affine(enc_affine, enc_affine_key)
 
 print('Déchiffré de enc_affine.txt :', dec_affine)
+
+print('\n')
+print('----- Chiffrement de vigenere -----')
+print('\n')
+
+key_vigenere = 'PWET'
+msg_vigenere = 'JEREPRENDSDESCOURSENTROISIEMEANNEEDELICENCEETLECOURSDEPABLOESTTROPCHOUETTE'
+
+# Question 2.1
+
+print('-- Exemple avec clé --')
+print('Message à chiffré :', msg_vigenere)
+print('Clé :', key_vigenere)
+
+cipher_vigenere = chiffre_vigenere(msg_vigenere, key_vigenere)
+
+print('Chiffré :', cipher_vigenere)
+
+print('Déchiffré :', dechiffre_vigenere(cipher_vigenere, key_vigenere), '\n')
+
+
+print('-- Attaque de vigenère sans clé --')
+
+f = open('assets/file2_enc.txt')
+enc2 = f.read()
+f.close()
+
+print("Attaque file2_enc.txt 👽️\n", attaque_vigenere(enc2), '\n')
+
+# --------------------
+
+f = open('assets/file3_enc.txt')
+enc3 = f.read()
+f.close()
+
+print("Attaque file3_enc.txt 👽️\n", attaque_vigenere(enc3), '\n')
+
+# --------------------
+
+f = open('assets/file4_enc.txt')
+enc4 = f.read()
+f.close()
+
+fichier = open("assets/file4_dec.txt", "w+")
+fichier.truncate(0)
+
+fichier.write(str(attaque_vigenere(enc4)))
+fichier.close()
+print("Attaque file4_enc.txt 👽️\n -> Ouvrir le fichier file4_dec.txt 👽️\n")
