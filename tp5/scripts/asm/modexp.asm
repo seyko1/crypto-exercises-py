@@ -42,6 +42,7 @@ _modexp_loop:
   bne _modexp_loop_sqr r9 #1    ; if r9 != 1: goto _modexp_loop_sqr; otherwise:
 
 _modexp_loop_mul:
+  dbg 250
   mov r20 r8                    ; r20 is tmp
   mov r21 r5                    ; r21 is res
   cal bignum_copy               ; tmp = res
@@ -52,7 +53,9 @@ _modexp_loop_mul:
   mov r24 r4                    ; r24 is mod
   cal bignum_mul                ; res = tmp * base
 
+;square
 _modexp_loop_sqr:
+  dbg 220
   mov r20 r8                    ; r20 is tmp
   mov r21 r6                    ; r21 is base
   cal bignum_copy               ; tmp = base
