@@ -1,6 +1,7 @@
 # Commande de génération de clé :
 # openssl prime -generate -bits 512
 
+import hashlib
 from Cryptodome.Util.number import getPrime
 # pip3 install pycryptodomex
 
@@ -39,7 +40,7 @@ def gen_rsa_keypair(bits):
 
 # Question 2.3
 # -----
-# Fonction qui fait l'exponentiation modulaire avec un entier m, et la paire (exposant e, module de chiffrement n)
+# Fonction qui fait l'exponentiation modulaire à partir d'un message m, et la paire (exposant e, module de chiffrement n)
 # https://en.wikipedia.org/wiki/Modular_exponentiation
 # -----
 def rsa (m, e, n):
@@ -65,3 +66,28 @@ def rsa_dec (c, d, n):
   m = m_int.to_bytes((m_int.bit_length() + 7) // 8, 'big').decode('utf-8')
 
   return m
+
+# Question 3.3
+
+# Fonction qui prend en paramètre un entier (big endian) et renvoie l’entier correspondant à son condensé.
+def h(m):
+  # conversion de l'entier en tableau de bytes.
+  bytes = m.to_bytes((m.bit_length() + 7) // 8, 'big')
+
+  sha256_hash = hashlib.sha256()
+  sha256_hash.update(bytes)
+
+  # Conversion du condensé (tableau de bytes) en entier.
+  return int.from_bytes(sha256_hash.digest(), 'big')
+
+# Question 3.4
+
+def rsa_sign(msg, key, n):
+  hash = h(msg)
+
+  # s = (H(m) ^ d) mod n.
+  return pow(hash, key, n)
+
+def rsa_verify(s, key, n):
+  # v = (s ^ e) mod n.
+  return pow(s, key, n)
