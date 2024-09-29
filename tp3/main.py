@@ -98,3 +98,40 @@ print('Alice déchiffre le message de Bob avec sa clé privée...\n')
 secret_key_alice = rsa_kp_alice[1]
 decipher_bob = rsa_dec(cipher_bob, secret_key_alice[0], secret_key_alice[1])
 print('Message dechiffré de Bob :', decipher_bob, '\n')
+
+# Question 4.1
+
+# Il est possible, sans connaitre le message initial m de produire un chiffré c' à partir d'un chiffré c intercepté.
+# Il suffira du multiplier c avec le chiffré d'un autre message quelquonque m':
+
+# c′ = ( c × m′ ^ e) mod n
+
+# Le destinataire, en déchiffrant c' obtiendra (m' x m) mod n
+# Le message déchiffré sera le produit du message original m et du message m'
+
+print('----- Test malléabilité -----')
+
+rsa_kp_attaquant = gen_rsa_keypair(512)
+public_key_attaquant = rsa_kp_attaquant[0]
+
+m1 = 'Coucou Alice, c\'est Bob !'
+c1 = rsa_enc(m1, public_key_alice[0], public_key_alice[1])
+
+m2 = 'Pwet !'
+c2 = rsa_enc(m2, public_key_attaquant[0], public_key_attaquant[1])
+
+new_cipher = (c1 * (c2 ^ public_key_alice[0])) % public_key_alice[1]
+
+# Déchiffrement par Alice
+new_msg = rsa_dec(new_cipher, secret_key_alice[0], secret_key_alice[1])
+
+# It doesn't works yet...
+print('Message de Bob :', m1)
+print('Autre Message :', m2)
+print('Nouveau message produit :', new_msg)
+
+# Question 4.2
+
+# Le risque du problème de déterminisme et de permettre à un attaquant d'associer un chiffré répetitif à une donnée sensible comme un mot de passe.
+# Il pourrait tente de retrouver le mot de passe chiffré à l'aide d'un dictionnaire.
+# Le dictionnaire serait composé du mot de passe éventuels et de leur version chiffrée avec la clé publique interceptée.
