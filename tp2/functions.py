@@ -81,6 +81,8 @@ def dec_file(file, key):
   
   return dec_file_name
 
+# Question 3.3 avec CBC
+
 def enc_file_cbc(file, key, vector):
   with open(file, 'rb') as f:
     msg = f.read()
